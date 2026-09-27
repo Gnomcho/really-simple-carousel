@@ -23,6 +23,7 @@ export default function CarouselItem({
       alt={alt}
       width={width}
       height={height}
+      style={{ width: `calc(100cqh * ${width / height})` }}
       className={cn("h-full w-auto max-w-full object-contain", className)}
       loading="lazy"
     />

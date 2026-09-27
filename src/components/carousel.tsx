@@ -22,9 +22,10 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
   const count = slides.length;
   const listRef = useRef<HTMLUListElement>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const currentIndexLastPosition = useRef<number>(0);
+  const currentIndexLastPosition = useRef<number | undefined>(undefined);
 
   function handleScroll() {
+    console.error("handleScroll");
     const curr = listRef.current;
     if (!curr) return;
     const centerX = getCenterX(curr);
@@ -43,9 +44,8 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
 
     const newIndex = Number(closest.dataset.slideIndex);
     if (newIndex !== currentIndex) {
-      //TODO: make this check based on the direction and scroll position
       setCurrentIndex(newIndex);
-      currentIndexLastPosition.current = centerX - getCenterX(closest);
+      currentIndexLastPosition.current = getCenterX(closest);
     }
   }
 
@@ -54,18 +54,25 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
     if (!curr) return;
     const child = [...curr.children][threshold];
 
-    child.scrollIntoView({
-      behavior: "instant",
-      inline: "center",
-      block: "nearest",
-    });
+    if (currentIndexLastPosition.current === undefined) {
+      child.scrollIntoView({
+        behavior: "instant",
+        inline: "center",
+        block: "nearest",
+      });
 
-    curr.scrollLeft = curr.scrollLeft + currentIndexLastPosition.current;
+      return;
+    }
+
+    const childCenterX = getCenterX(child);
+
+    console.error(1, currentIndex, curr.scrollLeft, currentIndexLastPosition.current, childCenterX);
+    curr.scrollLeft = curr.scrollLeft + (childCenterX - currentIndexLastPosition.current);
   }, [currentIndex]);
 
   return (
     <section className={cn("mx-auto flex h-200 w-full max-w-full flex-col overflow-hidden", className)}>
-      <div className="relative min-h-0 w-full flex-1">
+      <div className="[container-type:size] relative min-h-0 w-full flex-1">
         <ul
           ref={listRef}
           onScroll={handleScroll}
@@ -74,7 +81,7 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
           {Array.from({ length: threshold * 2 + 1 }, (_, offset) => {
             const index = currentIndex - threshold + offset;
             return (
-              <li key={index} data-slide-index={index} className="w-fit shrink-0 snap-always">
+              <li key={index} data-slide-index={index} className="w-max shrink-0">
                 {slides[wrap(index, count)]}
               </li>
             );
