@@ -46,7 +46,6 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
       //TODO: make this check based on the direction and scroll position
       setCurrentIndex(newIndex);
       currentIndexLastPosition.current = centerX - getCenterX(closest);
-      console.error(newIndex, centerX - getCenterX(closest));
     }
   }
 
