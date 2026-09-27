@@ -95,7 +95,7 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
 
   return (
     <section className={cn("mx-auto flex h-200 w-full max-w-full flex-col overflow-hidden", className)}>
-      <div className="@container-size relative min-h-0 w-full flex-1">
+      <div className="relative min-h-0 w-full flex-1">
         <div
           ref={viewportRef}
           onScroll={handleScroll}
