@@ -38,7 +38,7 @@ function App() {
   return (
     <>
       <div className="flex h-dvh flex-col justify-center">
-        <Carousel className="max-h-[30dvh] w-[50dvh]" threshold={10}>
+        <Carousel className="max-h-[30dvh]" threshold={10}>
           {Array.from({ length: 10000 }, (_, index) => (
             <CarouselItem key={index} id={index} {...images[index % images.length]} />
           ))}
