@@ -1,7 +1,7 @@
 import CarouselItem from "./components/carousel-item";
 import { Carousel } from "./components/carousel";
 
-const images = [
+const imageSizes = [
   { width: 100, height: 100 },
   { width: 100, height: 100 },
   { width: 100, height: 100 },
@@ -40,7 +40,7 @@ function App() {
       <div className="flex h-dvh flex-col justify-center">
         <Carousel className="max-h-[30dvh]" threshold={10}>
           {Array.from({ length: 10000 }, (_, index) => (
-            <CarouselItem key={index} id={index} {...images[index % images.length]} />
+            <CarouselItem key={index} id={index} {...imageSizes[index % imageSizes.length]} />
           ))}
         </Carousel>
       </div>
