@@ -22,6 +22,7 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
   const count = slides.length;
   const listRef = useRef<HTMLUListElement>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const currentIndexLastPosition = useRef<number>(0);
 
   function handleScroll() {
     const curr = listRef.current;
@@ -41,9 +42,11 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
     if (!(closest instanceof HTMLElement)) return;
 
     const newIndex = Number(closest.dataset.slideIndex);
-    if (newIndex !== currentIndex && minDist < 50) {
+    if (newIndex !== currentIndex) {
       //TODO: make this check based on the direction and scroll position
       setCurrentIndex(newIndex);
+      currentIndexLastPosition.current = centerX - getCenterX(closest);
+      console.error(newIndex, centerX - getCenterX(closest));
     }
   }
 
@@ -57,6 +60,8 @@ function CarouselMultipleItems({ children, threshold = 10, className }: Carousel
       inline: "center",
       block: "nearest",
     });
+
+    curr.scrollLeft = curr.scrollLeft + currentIndexLastPosition.current;
   }, [currentIndex]);
 
   return (
